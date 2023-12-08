@@ -12,7 +12,7 @@ import { capitalizeText, searchFolder } from "./utils";
 
 type Frameworks = "solid" | "react" | "reactnative";
 
-export const generateComponent = async (
+export const createModel = async (
   componentName: string,
   folderName: string
 ) => {
@@ -128,10 +128,10 @@ export const generateComponent = async (
           message: neutralMsg("Provide a path to create the folder: "),
         });
         createFolder(`${folderPath}/${folderName}`);
-        generateComponent(finalComponentName, folderName);
+        createModel(finalComponentName, folderName);
       } else {
         createFolder(folderName);
-        generateComponent(finalComponentName, folderName);
+        createModel(finalComponentName, folderName);
       }
     }
   } catch (error) {

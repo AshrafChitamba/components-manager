@@ -4,25 +4,7 @@ import { Command } from "commander";
 import figlet from "figlet";
 import { createFolder } from "./create-folder";
 import { generateComponent } from "./generate-component";
-/* 
-
-.option(
-    "create-folder, --cf  <value>",
-    "Creates a new directory and an index file inside it"
-  )
-  .option(
-    "create-module, --cm <value>",
-    "Creates a component module and exports it inside the index file"
-  )
-  .option(
-    "create-type, --ct <value>",
-    "Creates a type and exports it inside the index file"
-  )
-  .option(
-    "create-interface, --ci <value>",
-    "Create an interface and exports it inside the index file"
-  )
-*/
+import { createModel } from "./create-model";
 
 // logging the CLI name
 console.log(figlet.textSync("Components Manager"));
@@ -41,7 +23,7 @@ program
 // 1. Create a folder
 program
   .command("create-folder <folderPath>")
-  .description("Creates a new directory and an index file inside it")
+  .description("\nCreates a new directory and an index file inside it")
   .alias("cf")
   .action((folderPath: string) => createFolder(folderPath));
 
@@ -51,13 +33,28 @@ program
   .description(
     "Generates a component module and exports it inside the index file"
   )
-  // .option(
-  //   "-t, --template [template]",
-  //   "Template can either be ReactjS(react) or SolisJs(solid)"
-  // )
+  .option(
+    "-t, --template [template]",
+    "\nTemplate can either be ReactjS(react) or SolisJs(solid)"
+  )
   .alias("gc")
   .action((componentName: string, folderName: string) => {
     generateComponent(componentName, folderName);
+  });
+
+// 3. Create a model or schema either a type or an interface
+program
+  .command("create-model <modelName> <folderName>")
+  .description(
+    "\nCreates a model either a type or an interface and exports it inside the index file"
+  )
+  .option(
+    "-m, --model [model]",
+    "Model can either be type or interface"
+  )
+  .alias("cm")
+  .action((componentName: string, folderName: string) => {
+    createModel(componentName, folderName);
   });
 
 // parce the process arguments to the commander program
@@ -65,4 +62,3 @@ program.parse(process.argv);
 
 // program options
 const options = program.opts();
-
