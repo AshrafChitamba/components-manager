@@ -8,33 +8,68 @@ export const generateComponent = (
 ) => {
   try {
     const folderRelativePath = searchFolder(path.resolve(), folderName);
-    const componentBoilerPlate = `
-      import { Component } from "solid-js";
-
-      export const ${componentName}: Component = () => {
-      
-      return <div>${componentName}</div>;
-      };
+    const componentBoilerPlate = `import { Component } from "solid-js";
+        \nexport const ${componentName}: Component = () => {
+        \nreturn <div>${componentName}</div>;
+        \n};
     `;
 
     // if the folder name exists
     if (folderRelativePath) {
+      const componentPath = path.join(
+        folderRelativePath,
+        `${componentName}.tsx`
+      );
+      console.log(componentPath);
       // create an [componentName].ts file inside the created folder
-      fs.writeFileSync(
-        `${folderRelativePath}/${componentName}.tsx`,
-        componentBoilerPlate
-      );
+      // if the file does not exist
+      if (!fs.existsSync(componentPath)) {
+        fs.writeFileSync(componentPath, componentBoilerPlate);
+        console.log(
+          successMsg(
+            `+ generated a ${componentName} component inside ${folderName}`
+          )
+        );
 
-      console.log(
-        successMsg(
-          `+ created a component ${componentName} inside ${folderName}`
-        )
-      );
+        // if there is no index.ts file inside the folder which already exists
+        const indexFilePath = path.join(folderRelativePath, `index.ts`);
+        if (!fs.existsSync(indexFilePath)) {
+          fs.writeFileSync(
+            indexFilePath,
+            `// This file exports all your modules \nexport * from '${componentName}'`
+          );
+          console.log(
+            successMsg(`+ created index.ts file inside ${folderName}`)
+          );
+        }
+        // export the created component inside the index.ts file
+        else {
+          fs.appendFileSync(indexFilePath, `\nexport * from '${componentName}'`);
+
+          console.log(
+            successMsg(
+              `+ ${componentName} exported inside ${folderName}/index.ts file`
+            )
+          );
+        }
+      }
+      // otherwise
+      else {
+        console.log(
+          errorMsg(
+            `${componentName} component already exist inside ${folderName}`
+          )
+        );
+      }
+    }
+    // otherwise
+    else {
+      // use inqure now
     }
   } catch (error) {
     console.log(
       errorMsg(
-        `Failded to generate ${componentName} component inside ${folderName}`
+        `Failed to generate ${componentName} component inside ${folderName}`
       )
     );
   }
@@ -59,7 +94,7 @@ const searchFolder = (
           return result;
         }
       }
-    } else return null;
+    }
   }
   return null;
 };

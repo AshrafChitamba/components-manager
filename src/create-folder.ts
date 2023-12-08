@@ -9,13 +9,15 @@ export const createFolder = (folderPath: string) => {
 
   try {
     // if the relative folder path does not exist
+    const indexFilePath = path.join(folderRelativePath, `index.ts`);
+
     if (!fs.existsSync(folderRelativePath)) {
       // create the folder
       fs.mkdirSync(folderRelativePath);
 
       // create an index.ts file inside the created folder
       fs.writeFileSync(
-        `${folderRelativePath}/index.ts`,
+        indexFilePath,
         "// This file exports all your modules"
       );
 
@@ -25,9 +27,9 @@ export const createFolder = (folderPath: string) => {
     // otherwise
     else {
       // if there is no index.ts file inside the folder which already exists
-      if (!fs.existsSync(`${folderRelativePath}/index.ts`)) {
+      if (!fs.existsSync(indexFilePath)) {
         fs.writeFileSync(
-          `${folderRelativePath}/index.ts`,
+          indexFilePath,
           "// This file exports all your modules"
         );
         console.log(successMsg(`+ created index.ts file inside ${folderName}`));
@@ -35,13 +37,13 @@ export const createFolder = (folderPath: string) => {
 
       console.log(
         errorMsg(
-          `Folder name ${folderName} already exists on path ${folderPath}`
+          `${folderName} folder already exists on path ${folderPath}`
         )
       );
     }
   } catch (error) {
     console.log(
-      errorMsg(`Failded to create folder ${folderName} path ${folderPath}`)
+      errorMsg(`Failed to create folder ${folderName} path ${folderPath}`)
     );
   }
 };
