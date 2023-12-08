@@ -1,30 +1,49 @@
 import fs from "fs";
 import path from "path";
-import { errorMsg, successMsg } from "./chalk-themes";
+import { errorMsg, successMsg, neutralMsg } from "./chalk-themes";
+import { select, confirm } from "@inquirer/prompts";
+import { reactBoilerPlate, solidBoilerPlate } from "./boiler-plates";
 
-export const generateComponent = (
+export const generateComponent = async (
   componentName: string,
   folderName: string
 ) => {
   try {
+    // search for the folder first
     const folderRelativePath = searchFolder(path.resolve(), folderName);
-    const componentBoilerPlate = `import { Component } from "solid-js";
-        \nexport const ${componentName}: Component = () => {
-        \nreturn <div>${componentName}</div>;
-        \n};
-    `;
 
     // if the folder name exists
     if (folderRelativePath) {
+      // Prompt the user to choose the type of framework
+      const framework: "solid" | "react" = await select({
+        message: neutralMsg("Select a component framework"),
+        choices: [
+          {
+            name: "ReactJs",
+            value: "react",
+          },
+          {
+            name: "SolidJs",
+            value: "solid",
+          },
+        ],
+      });
+
       const componentPath = path.join(
         folderRelativePath,
-        `${componentName}.tsx`
+        `${componentName}.${framework === "react" ? "jsx" : "tsx"}`
       );
-      console.log(componentPath);
+      // component boiler plate
+      const boilerPlate =
+        framework === "solid"
+          ? solidBoilerPlate(componentName)
+          : reactBoilerPlate(componentName);
+
       // create an [componentName].ts file inside the created folder
       // if the file does not exist
       if (!fs.existsSync(componentPath)) {
-        fs.writeFileSync(componentPath, componentBoilerPlate);
+        fs.writeFileSync(componentPath, boilerPlate);
+
         console.log(
           successMsg(
             `+ generated a ${componentName} component inside ${folderName}`
@@ -44,7 +63,10 @@ export const generateComponent = (
         }
         // export the created component inside the index.ts file
         else {
-          fs.appendFileSync(indexFilePath, `\nexport * from '${componentName}'`);
+          fs.appendFileSync(
+            indexFilePath,
+            `\nexport * from '${componentName}'`
+          );
 
           console.log(
             successMsg(
@@ -60,11 +82,23 @@ export const generateComponent = (
             `${componentName} component already exist inside ${folderName}`
           )
         );
+        const overide = await confirm({
+          message: neutralMsg("Do you want to overide it?"),
+          default: false,
+        });
+          
+        if (overide) {
+          fs.writeFileSync(componentPath, boilerPlate);
+
+          console.log(
+            successMsg(`+ Overriden ${componentName} component inside ${folderName}`)
+          );
+        }
       }
     }
     // otherwise
     else {
-      // use inqure now
+      // ask the user to create the folder inside the root directory or specified one
     }
   } catch (error) {
     console.log(
