@@ -4,6 +4,25 @@ import { Command } from "commander";
 import figlet from "figlet";
 import { createFolder } from "./create-folder";
 import { generateComponent } from "./generate-component";
+/* 
+
+.option(
+    "create-folder, --cf  <value>",
+    "Creates a new directory and an index file inside it"
+  )
+  .option(
+    "create-module, --cm <value>",
+    "Creates a component module and exports it inside the index file"
+  )
+  .option(
+    "create-type, --ct <value>",
+    "Creates a type and exports it inside the index file"
+  )
+  .option(
+    "create-interface, --ci <value>",
+    "Create an interface and exports it inside the index file"
+  )
+*/
 
 // logging the CLI name
 console.log(figlet.textSync("Components Manager"));
@@ -45,5 +64,5 @@ program
 program.parse(process.argv);
 
 // program options
-// const options = program.opts();
+const options = program.opts();
 

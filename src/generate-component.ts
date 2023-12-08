@@ -8,6 +8,7 @@ import {
   solidBoilerPlate,
 } from "./boiler-plates";
 import { createFolder } from "./create-folder";
+import { searchFolder } from "./utils";
 
 type Frameworks = "solid" | "react" | "reactnative";
 
@@ -141,29 +142,4 @@ export const generateComponent = async (
       )
     );
   }
-};
-
-// recursively search for the folder name
-const searchFolder = (
-  startPath: string,
-  targetFolder: string
-): string | null => {
-  const files = fs.readdirSync(startPath);
-
-  for (const file of files) {
-    const filePath = path.join(startPath, file);
-    const isDirectory = fs.statSync(filePath).isDirectory();
-
-    if (isDirectory) {
-      if (file === targetFolder) {
-        return filePath;
-      } else {
-        const result = searchFolder(filePath, targetFolder);
-        if (result) {
-          return result;
-        }
-      }
-    }
-  }
-  return null;
 };
