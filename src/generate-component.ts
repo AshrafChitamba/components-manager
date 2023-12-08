@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { errorMsg, successMsg, neutralMsg } from "./chalk-themes";
-import { select, confirm } from "@inquirer/prompts";
+import { select, confirm, input } from "@inquirer/prompts";
 import { reactBoilerPlate, solidBoilerPlate } from "./boiler-plates";
+import { createFolder } from "./create-folder";
 
 export const generateComponent = async (
   componentName: string,
@@ -86,12 +87,13 @@ export const generateComponent = async (
           message: neutralMsg("Do you want to overide it?"),
           default: false,
         });
-          
         if (overide) {
           fs.writeFileSync(componentPath, boilerPlate);
 
           console.log(
-            successMsg(`+ Overriden ${componentName} component inside ${folderName}`)
+            successMsg(
+              `+ Overriden ${componentName} component inside ${folderName}`
+            )
           );
         }
       }
@@ -99,6 +101,24 @@ export const generateComponent = async (
     // otherwise
     else {
       // ask the user to create the folder inside the root directory or specified one
+      console.log(
+        errorMsg(`${folderName} folder doesn't exist in your project`)
+      );
+      const createInRoot = await confirm({
+        message: neutralMsg("Do you want to create it in the root Dir?"),
+        default: true,
+      });
+      if (!createInRoot) {
+        const folderPath = await input({
+          message: neutralMsg("Provide a path to create the folder: "),
+        });
+
+        createFolder(`${folderPath}/${folderName}`);
+        generateComponent(componentName, folderName);
+      } else {
+        createFolder(folderName);
+        generateComponent(componentName, folderName);
+      }
     }
   } catch (error) {
     console.log(
@@ -109,6 +129,7 @@ export const generateComponent = async (
   }
 };
 
+// recursively search for the folder name
 const searchFolder = (
   startPath: string,
   targetFolder: string
