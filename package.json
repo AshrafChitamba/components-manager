@@ -1,11 +1,11 @@
 {
-  "name": "modman",
+  "name": "compman",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "modman": "./dist/index.js"
+    "compman": "./dist/index.js"
   },
   "scripts": {
     "build": "npx tsc && tsc-alias",
@@ -17,7 +17,8 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
-    "figlet": "^1.7.0"
+    "figlet": "^1.7.0",
+    "inquirer": "^9.2.12"
   },
   "devDependencies": {
     "@types/figlet": "^1.5.8",

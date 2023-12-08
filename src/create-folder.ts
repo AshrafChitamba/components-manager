@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { errorMsg, successMsg } from "./chalk-themes";
 
-export const createFolder = async (folderPath: string) => {
+export const createFolder = (folderPath: string) => {
   const pathArray = folderPath.split("/");
   const folderName = pathArray[pathArray.length - 1];
   const folderRelativePath = path.resolve() + path.join(folderPath);
@@ -25,7 +25,7 @@ export const createFolder = async (folderPath: string) => {
     // otherwise
     else {
       // if there is no index.ts file inside the folder which already exists
-      if (!fs.existsSync(folderRelativePath + "index.ts")) {
+      if (!fs.existsSync(`${folderRelativePath}/index.ts`)) {
         fs.writeFileSync(
           `${folderRelativePath}/index.ts`,
           "// This file exports all your modules"
