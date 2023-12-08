@@ -15,3 +15,14 @@ export const reactBoilerPlate = (componentName: string) => {
         \n};
     `;
 };
+
+// ReactJs boiler-plate
+export const reactNativeBoilerPlate = (componentName: string) => {
+    return `import { View, Text } from 'react-native';
+        \nexport const ${componentName} = () => {
+        \n\t<View>
+        \n\t\t<Text>index</Text>
+        \n\t</View>;
+        \n};
+    `;
+};

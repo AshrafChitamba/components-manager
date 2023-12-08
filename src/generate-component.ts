@@ -2,8 +2,14 @@ import fs from "fs";
 import path from "path";
 import { errorMsg, successMsg, neutralMsg } from "./chalk-themes";
 import { select, confirm, input } from "@inquirer/prompts";
-import { reactBoilerPlate, solidBoilerPlate } from "./boiler-plates";
+import {
+  reactBoilerPlate,
+  reactNativeBoilerPlate,
+  solidBoilerPlate,
+} from "./boiler-plates";
 import { createFolder } from "./create-folder";
+
+type Frameworks = "solid" | "react" | "reactnative";
 
 export const generateComponent = async (
   componentName: string,
@@ -12,11 +18,13 @@ export const generateComponent = async (
   try {
     // search for the folder first
     const folderRelativePath = searchFolder(path.resolve(), folderName);
+    const finalComponentName =
+      componentName.charAt(0).toUpperCase() + componentName.substring(1);
 
     // if the folder name exists
     if (folderRelativePath) {
       // Prompt the user to choose the type of framework
-      const framework: "solid" | "react" = await select({
+      const framework: Frameworks = await select({
         message: neutralMsg("Select a component framework"),
         choices: [
           {
@@ -27,18 +35,25 @@ export const generateComponent = async (
             name: "SolidJs",
             value: "solid",
           },
+          {
+            name: "ReactNative",
+            value: "reactnative",
+          },
         ],
       });
 
       const componentPath = path.join(
         folderRelativePath,
-        `${componentName}.${framework === "react" ? "jsx" : "tsx"}`
+        `${finalComponentName}.${framework === "react" ? "jsx" : "tsx"}`
       );
+
       // component boiler plate
       const boilerPlate =
         framework === "solid"
-          ? solidBoilerPlate(componentName)
-          : reactBoilerPlate(componentName);
+          ? solidBoilerPlate(finalComponentName)
+          : framework === "react"
+          ? reactBoilerPlate(finalComponentName)
+          : reactNativeBoilerPlate(finalComponentName);
 
       // create an [componentName].ts file inside the created folder
       // if the file does not exist
@@ -47,7 +62,7 @@ export const generateComponent = async (
 
         console.log(
           successMsg(
-            `+ generated a ${componentName} component inside ${folderName}`
+            `+ generated a ${finalComponentName} component inside ${folderName}`
           )
         );
 
@@ -56,7 +71,7 @@ export const generateComponent = async (
         if (!fs.existsSync(indexFilePath)) {
           fs.writeFileSync(
             indexFilePath,
-            `// This file exports all your modules \nexport * from '${componentName}'`
+            `// This file exports all your modules \nexport * from '${finalComponentName}'`
           );
           console.log(
             successMsg(`+ created index.ts file inside ${folderName}`)
@@ -66,12 +81,12 @@ export const generateComponent = async (
         else {
           fs.appendFileSync(
             indexFilePath,
-            `\nexport * from '${componentName}'`
+            `\nexport * from '${finalComponentName}'`
           );
 
           console.log(
             successMsg(
-              `+ ${componentName} exported inside ${folderName}/index.ts file`
+              `+ ${finalComponentName} component exported inside ${folderName}/index.ts file`
             )
           );
         }
@@ -80,7 +95,7 @@ export const generateComponent = async (
       else {
         console.log(
           errorMsg(
-            `${componentName} component already exist inside ${folderName}`
+            `${finalComponentName} component already exist inside ${folderName}`
           )
         );
         const overide = await confirm({
@@ -92,7 +107,7 @@ export const generateComponent = async (
 
           console.log(
             successMsg(
-              `+ Overriden ${componentName} component inside ${folderName}`
+              `+ Overriden ${finalComponentName} component inside ${folderName}`
             )
           );
         }
@@ -112,12 +127,11 @@ export const generateComponent = async (
         const folderPath = await input({
           message: neutralMsg("Provide a path to create the folder: "),
         });
-
         createFolder(`${folderPath}/${folderName}`);
-        generateComponent(componentName, folderName);
+        generateComponent(finalComponentName, folderName);
       } else {
         createFolder(folderName);
-        generateComponent(componentName, folderName);
+        generateComponent(finalComponentName, folderName);
       }
     }
   } catch (error) {
