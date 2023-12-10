@@ -2,9 +2,7 @@
 
 import { Command } from "commander";
 import figlet from "figlet";
-import { createFolder } from "./create-folder";
-import { generateComponent } from "./generate-component";
-import { createModel } from "./create-model";
+import { createFolder, generateComponent, createModel } from "./functions";
 
 // logging the CLI name
 console.log(figlet.textSync("Components Manager"));
@@ -31,11 +29,7 @@ program
 program
   .command("generate-component <componentName> <folderName>")
   .description(
-    "Generates a component module and exports it inside the index file"
-  )
-  .option(
-    "-t, --template [template]",
-    "\nTemplate can either be ReactjS(react) or SolisJs(solid)"
+    "\nGenerates a component module and exports it inside the index file"
   )
   .alias("gc")
   .action((componentName: string, folderName: string) => {
@@ -48,17 +42,10 @@ program
   .description(
     "\nCreates a model either a type or an interface and exports it inside the index file"
   )
-  .option(
-    "-m, --model [model]",
-    "Model can either be type or interface"
-  )
   .alias("cm")
-  .action((componentName: string, folderName: string) => {
-    createModel(componentName, folderName);
+  .action((modelName: string, folderName: string) => {
+    createModel(modelName, folderName);
   });
 
 // parce the process arguments to the commander program
 program.parse(process.argv);
-
-// program options
-const options = program.opts();

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { errorMsg, neutralMsg, successMsg } from "./chalk-themes";
+import { errorMsg, neutralMsg, successMsg } from "../chalk-themes";
 import { confirm } from "@inquirer/prompts";
 
 export const createFolder = async (folderPath: string) => {
@@ -18,7 +18,7 @@ export const createFolder = async (folderPath: string) => {
       fs.mkdirSync(folderRelativePath);
       console.log(
         successMsg(
-          `+ created folder named ${folderName} path: ${joinedFolderPath}`
+          `+ created folder named ${folderName} path: ${folderRelativePath}`
         )
       );
       // create an index.ts file inside the created folder

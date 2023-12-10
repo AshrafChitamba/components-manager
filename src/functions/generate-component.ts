@@ -1,18 +1,18 @@
 import fs from "fs";
 import path from "path";
-import { errorMsg, successMsg, neutralMsg } from "./chalk-themes";
+import { errorMsg, successMsg, neutralMsg } from "../chalk-themes";
 import { select, confirm, input } from "@inquirer/prompts";
 import {
   reactBoilerPlate,
   reactNativeBoilerPlate,
   solidBoilerPlate,
-} from "./boiler-plates";
+} from "../boiler-plates";
 import { createFolder } from "./create-folder";
-import { capitalizeText, searchFolder } from "./utils";
+import { capitalizeText, searchFolder } from "../utils";
 
 type Frameworks = "solid" | "react" | "reactnative";
 
-export const createModel = async (
+export const generateComponent = async (
   componentName: string,
   folderName: string
 ) => {
@@ -55,7 +55,7 @@ export const createModel = async (
           ? reactBoilerPlate(finalComponentName)
           : reactNativeBoilerPlate(finalComponentName);
 
-      // create an [componentName].ts file inside the created folder
+      // create an [componentName].ts file inside the folderName
       // if the file does not exist
       if (!fs.existsSync(componentPath)) {
         fs.writeFileSync(componentPath, boilerPlate);
@@ -128,10 +128,10 @@ export const createModel = async (
           message: neutralMsg("Provide a path to create the folder: "),
         });
         createFolder(`${folderPath}/${folderName}`);
-        createModel(finalComponentName, folderName);
+        generateComponent(finalComponentName, folderName);
       } else {
         createFolder(folderName);
-        createModel(finalComponentName, folderName);
+        generateComponent(finalComponentName, folderName);
       }
     }
   } catch (error) {

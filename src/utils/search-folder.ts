@@ -11,8 +11,9 @@ export const searchFolder = (
   for (const file of files) {
     const filePath = path.join(startPath, file);
     const isDirectory = fs.statSync(filePath).isDirectory();
-
-    if (isDirectory) {
+    const excludedFolders = file !== "node_modules" && file !== "dist";
+    
+    if (isDirectory && excludedFolders) {
       if (file === targetFolder) {
         return filePath;
       } else {
