@@ -5,12 +5,18 @@
     "strict": true,
     "target": "ES2022",
     "module": "ESNext",
+    "lib": ["ESNext", "ES2022", "ES7", "ES6"],
     "esModuleInterop": true,
     "moduleResolution": "Node",
-    "allowJs": true
+    "allowJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true
   },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
   "tsc-alias": {
     "resolveFullPaths": true,
     "verbose": false
-  },
+  }
 }
