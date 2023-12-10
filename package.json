@@ -1,9 +1,16 @@
 {
   "name": "compman",
   "version": "1.0.0",
-  "description": "",
+  "repository": {
+    "url": "https://github.com/AshrafChitamba/components-manager"
+  },
+  "homepage": "https://github.com/AshrafChitamba/components-manager",
+  "description": "Easily create and exort your components and modules in export banner pattern in your ReactJs, SolidJs and ReactNative projects",
   "main": "dist/index.js",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "bin": {
     "compman": "./dist/index.js"
   },
