@@ -71,7 +71,7 @@ export const generateComponent = async (
         if (!fs.existsSync(indexFilePath)) {
           fs.writeFileSync(
             indexFilePath,
-            `// This file exports all your modules \nexport * from '${finalComponentName}'`
+            `// This file exports all your modules \nexport * from './${finalComponentName}'`
           );
           console.log(
             successMsg(`+ created index.ts file inside ${folderName}`)
@@ -81,7 +81,7 @@ export const generateComponent = async (
         else {
           fs.appendFileSync(
             indexFilePath,
-            `\nexport * from '${finalComponentName}'`
+            `\nexport * from './${finalComponentName}'`
           );
 
           console.log(

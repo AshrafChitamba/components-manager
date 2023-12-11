@@ -55,7 +55,7 @@ export const createModel = async (modelName: string, folderName: string) => {
         if (!fs.existsSync(indexFilePath)) {
           fs.writeFileSync(
             indexFilePath,
-            `// This file exports all your modules \nexport * from '${finalModelName}'`
+            `// This file exports all your modules \nexport * from './${finalModelName}'`
           );
           console.log(
             successMsg(`+ created index.ts file inside ${folderName}`)
@@ -65,7 +65,7 @@ export const createModel = async (modelName: string, folderName: string) => {
         else {
           fs.appendFileSync(
             indexFilePath,
-            `\nexport * from '${finalModelName}'`
+            `\nexport * from './${finalModelName}'`
           );
 
           console.log(
