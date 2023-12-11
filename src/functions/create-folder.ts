@@ -2,11 +2,11 @@ import fs from "fs";
 import path from "path";
 import { errorMsg, neutralMsg, successMsg } from "../chalk-themes";
 import { confirm } from "@inquirer/prompts";
+import { extractFolderName } from "../utils";
 
 export const createFolder = async (folderPath: string) => {
   const joinedFolderPath = path.join(`/${folderPath}`);
-  const folderPathArray = folderPath.split("/");
-  const folderName = folderPathArray[folderPathArray.length - 1];
+  const folderName = extractFolderName(folderPath)
   const folderRelativePath = path.join(path.resolve(), joinedFolderPath);
 
   try {

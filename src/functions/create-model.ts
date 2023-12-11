@@ -4,16 +4,18 @@ import { errorMsg, successMsg, neutralMsg } from "../chalk-themes";
 import { select, confirm, input } from "@inquirer/prompts";
 import { interfaceBoilerPlate, typeBoilerPlate } from "../boiler-plates";
 import { createFolder } from "./create-folder";
-import { capitalizeText, searchFolder } from "../utils";
+import { capitalizeText, extractFolderName, searchFolder } from "../utils";
 
 type Model = "type" | "interface";
 
-export const createModel = async (modelName: string, folderName: string) => {
+export const createModel = async (modelName: string, folderPath: string) => {
+  const folderName = extractFolderName(folderPath);
+
   try {
     // search for the folder first
     const folderRelativePath = searchFolder(path.resolve(), folderName);
     const finalModelName = capitalizeText(modelName);
-    
+
     // if the folder name exists
     if (folderRelativePath) {
       // Prompt the user to choose the type of model

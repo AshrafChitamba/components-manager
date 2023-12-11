@@ -8,14 +8,16 @@ import {
   solidBoilerPlate,
 } from "../boiler-plates";
 import { createFolder } from "./create-folder";
-import { capitalizeText, searchFolder } from "../utils";
+import { capitalizeText, extractFolderName, searchFolder } from "../utils";
 
 type Frameworks = "solid" | "react" | "reactnative";
 
 export const generateComponent = async (
   componentName: string,
-  folderName: string
+  folderPath: string
 ) => {
+  const folderName = extractFolderName(folderPath)
+  
   try {
     // search for the folder first
     const folderRelativePath = searchFolder(path.resolve(), folderName);
