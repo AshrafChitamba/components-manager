@@ -16,8 +16,8 @@ export const generateComponent = async (
   componentName: string,
   folderPath: string
 ) => {
-  const folderName = extractFolderName(folderPath)
-  
+  const folderName = extractFolderName(folderPath);
+
   try {
     // search for the folder first
     const folderRelativePath = searchFolder(path.resolve(), folderName);
@@ -46,7 +46,7 @@ export const generateComponent = async (
 
       const componentPath = path.join(
         folderRelativePath,
-        `${finalComponentName}.${framework === "react" ? "jsx" : "tsx"}`
+        `${finalComponentName}.tsx`
       );
 
       // component boiler plate
