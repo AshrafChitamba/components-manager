@@ -13,7 +13,7 @@ const program = new Command();
 // CLI details
 program
   .name("CompMan")
-  .version("1.0.0")
+  .version("1.0.12")
   .description(
     "A CLI to to reduce the building of modules and exporting them."
   );
